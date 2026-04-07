@@ -29,10 +29,10 @@ A Chrome extension that copies email addresses to your clipboard instead of open
 
 ## Permissions
 
-- `clipboardWrite` - Copy emails to clipboard
-- `tabs` - Update badge and scan pages
-- `storage` - Save your settings
-- `scripting` - Scan page content
+- `activeTab` - Access the currently active tab to scan for email addresses
+- `scripting` - Execute JavaScript to extract mailto links from pages
+- `storage` - Save your settings across sessions
+- `<all_urls>` (host_permissions) - Run content scripts on all web pages to detect mailto links
 
 ## Localization
 
