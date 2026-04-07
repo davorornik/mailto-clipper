@@ -8,6 +8,13 @@ const replaceCheck = document.getElementById('replaceCheck');
 
 const TIMEOUT_MS = 2000;
 
+function i18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = chrome.i18n.getMessage(key);
+  });
+}
+
 function showToast(msg, duration = 1800) {
   toast.textContent = msg;
   toast.classList.remove('hidden');
@@ -167,4 +174,5 @@ chrome.storage.local.get('interceptMailto', (data) => {
 });
 
 scanBtn.addEventListener('click', scanPage);
+i18n();
 scanPage();

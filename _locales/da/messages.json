@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Klik på mailto-links for at kopiere e-mailadresser. Scan sider for at finde alle mailto-links." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Scan" },
+  "no_emails": { "message": "Ingen e-mails fundet" },
+  "intercept": { "message": "Aflyt mailto" },
+  "copied": { "message": "Kopieret til udklipsholder!" }
+}

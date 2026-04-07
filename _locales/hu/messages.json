@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Kattintson a mailto linkekre az e-mail címek másolásához. Oldalak beolvasása az összes mailto link megkereséséhez." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Beolvasás" },
+  "no_emails": { "message": "Nem talált e-maileket" },
+  "intercept": { "message": "Mailto elfogása" },
+  "copied": { "message": "Másolva a vágólapra!" }
+}

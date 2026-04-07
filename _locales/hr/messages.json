@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Kliknite na mailto poveznice za kopiranje e-mail adresa. Skenirajte stranice za pronalaženje svih mailto poveznica." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Skeniraj" },
+  "no_emails": { "message": "Nije pronađen nijedan e-mail" },
+  "intercept": { "message": "Presreći mailto" },
+  "copied": { "message": "Kopirano u međuspremnik!" }
+}

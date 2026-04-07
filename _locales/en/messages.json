@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Click mailto links to copy email addresses. Scan pages to find all email links." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Scan" },
+  "no_emails": { "message": "No emails found" },
+  "intercept": { "message": "Intercept mailto" },
+  "copied": { "message": "Copied to Clipboard!" }
+}

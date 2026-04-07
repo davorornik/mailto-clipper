@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Faceți clic pe linkurile mailto pentru a copia adresele de e-mail. Scanați paginile pentru a găsi toate linkurile mailto." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Scanează" },
+  "no_emails": { "message": "Nu s-au găsit e-mailuri" },
+  "intercept": { "message": "Interceptează mailto" },
+  "copied": { "message": "Copiat în clipboard!" }
+}

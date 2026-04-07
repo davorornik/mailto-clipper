@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Klikněte na mailto odkazy pro kopírování e-mailových adres. Skenujte stránky pro nalezení všech mailto odkazů." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Skenovat" },
+  "no_emails": { "message": "Žádné e-maily nenalezeny" },
+  "intercept": { "message": "Zachytávat mailto" },
+  "copied": { "message": "Zkopírováno do schránky!" }
+}

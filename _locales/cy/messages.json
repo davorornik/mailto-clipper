@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Cliciwch ar gysylltau mailto i gopïo cyfeiriadau e-bost. Sganiwch dudalenau i ddod o hyd i'r holl gysylltau mailto." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Sganio" },
+  "no_emails": { "message": "Ni ddarganfuwyd e-byst" },
+  "intercept": { "message": "Atal mailto" },
+  "copied": { "message": "Copïwyd i'r clipboard!" }
+}

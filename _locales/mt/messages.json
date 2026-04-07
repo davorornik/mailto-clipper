@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Ikklikkja fuq links mailto biex tikkopja indirizzi email. Iskanji paġni biex issib il-links kollha mailto." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Iskanja" },
+  "no_emails": { "message": "Ma nstabux emails" },
+  "intercept": { "message": "Interceptja mailto" },
+  "copied": { "message": "Kkopjat fil-clipboard!" }
+}

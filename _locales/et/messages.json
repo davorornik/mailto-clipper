@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Klõpsake mailto linkidel e-posti aadresside kopeerimiseks. Leidke kõik mailto lingid lehtede skannimisega." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Skanni" },
+  "no_emails": { "message": "E-kirju ei leitud" },
+  "intercept": { "message": "Peata mailto" },
+  "copied": { "message": "Kopeeritud lõikepuhti!" }
+}

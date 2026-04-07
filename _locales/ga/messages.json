@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Cliceáil ar nascanna mailto chun seoltaí ríomhphoist a chóipeáil. Scan na leathanaigh chun gach nasc mailto a aimsiú." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Scanáil" },
+  "no_emails": { "message": "Níl ríomhphoist ann" },
+  "intercept": { "message": "Mailto a bhaint amach" },
+  "copied": { "message": "Cóipeáilte go dtí an ghearrthaisce!" }
+}

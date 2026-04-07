@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Spustelėkite mailto nuorodas, norėdami kopijuoti el. pašto adresus. Nuskaitykite puslapius, kad rastumėte visas mailto nuorodas." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Skenuoti" },
+  "no_emails": { "message": "El. laiškų nerasta" },
+  "intercept": { "message": "Perimti mailto" },
+  "copied": { "message": "Nukopijuota į mainų sritį!" }
+}

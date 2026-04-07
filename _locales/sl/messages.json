@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Kliknite na povezave mailto za kopiranje e-poštnih naslovov. Preglejte stran za iskanje vseh povezav mailto." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Poišči" },
+  "no_emails": { "message": "E-poštni naslovi niso najdeni" },
+  "intercept": { "message": "Prestrezi mailto" },
+  "copied": { "message": "Kopirano v odložišče!" }
+}

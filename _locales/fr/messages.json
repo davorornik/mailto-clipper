@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Cliquez sur les liens mailto pour copier les adresses e-mail. Analysez les pages pour trouver tous les liens mailto." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Analyser" },
+  "no_emails": { "message": "Aucun e-mail trouvé" },
+  "intercept": { "message": "Intercepter mailto" },
+  "copied": { "message": "Copié dans le presse-papiers!" }
+}

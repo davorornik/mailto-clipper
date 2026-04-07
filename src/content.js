@@ -26,7 +26,7 @@ async function copyEmail(e, link) {
     await navigator.clipboard.writeText(email);
     if (window.interceptMailto) {
       const originalText = link.innerText;
-      link.innerText = "Copied to Clipboard!";
+      link.innerText = chrome.i18n.getMessage('copied');
       setTimeout(() => link.innerText = originalText, TIMEOUT_MS);
     }
   } catch (err) {

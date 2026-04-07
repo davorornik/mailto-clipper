@@ -1,8 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Mailto Clipper",
+  "name": "__MSG_extension_name__",
+  "short_name": "MailtoClipper",
   "version": "1.0.0",
-  "description": "Hijacks mailto links to copy them to clipboard. Or finds all mailto links on the current page and copies them to your clipboard.",
+  "description": "__MSG_extension_description__",
+  "author": "Davor Ornik",
+  "default_locale": "en",
   "permissions": [
     "activeTab",
     "scripting",

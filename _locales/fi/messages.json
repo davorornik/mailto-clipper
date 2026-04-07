@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Klikkaa mailto-linkkejä kopioidaksesi sähköpostiosoitteet. Skannaa sivut löytääksesi kaikki mailto-linkit." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Skannaa" },
+  "no_emails": { "message": "Sähköpostiviestejä ei löytynyt" },
+  "intercept": { "message": "Intercept mailto" },
+  "copied": { "message": "Kopioitu leikepöydälle!" }
+}

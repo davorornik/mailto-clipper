@@ -1,0 +1,9 @@
+{
+  "extension_name": { "message": "Mailto Clipper" },
+  "extension_description": { "message": "Noklikšķiniet uz mailto saitēm, lai kopētu e-pasta adreses. Skenējiet lapas, lai atrastu visas mailto saites." },
+  "popup_title": { "message": "Mailto Clipper" },
+  "scan": { "message": "Skenēt" },
+  "no_emails": { "message": "E-pasti nav atrasti" },
+  "intercept": { "message": "Pārtvert mailto" },
+  "copied": { "message": "Kopēts starpliktuvē!" }
+}
