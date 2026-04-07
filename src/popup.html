@@ -1,0 +1,17 @@
+<!doctype html>
+<title>Mailto Clipper</title>
+<link rel="stylesheet" href="popup.css">
+<div class="container">
+  <header class="header">
+    <span class="title">Mailto Clipper</span>
+    <button id="scanBtn" class="btn">Scan</button>
+  </header>
+  <div id="statusBar" class="status hidden"><span id="statusText"></span></div>
+  <div id="emailList" class="email-list"><div id="emptyState" class="empty">No emails found</div></div>
+  <footer id="footerActions" class="footer hidden">
+    <button id="copyAllBtn" class="btn btn-primary">Copy All</button>
+    <button id="clearBtn" class="btn btn-ghost">Clear</button>
+  </footer>
+</div>
+<div id="toast" class="toast hidden"></div>
+<script src="popup.js"></script>
