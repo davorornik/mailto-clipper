@@ -3,12 +3,10 @@ const emailList = document.getElementById('emailList');
 const emptyState = document.getElementById('emptyState');
 const statusBar = document.getElementById('statusBar');
 const statusText = document.getElementById('statusText');
-const footerActions = document.getElementById('footerActions');
-const copyAllBtn = document.getElementById('copyAllBtn');
-const clearBtn = document.getElementById('clearBtn');
 const toast = document.getElementById('toast');
+const replaceCheck = document.getElementById('replaceCheck');
 
-let foundEmails = [];
+const TIMEOUT_MS = 2000;
 
 function showToast(msg, duration = 1800) {
   toast.textContent = msg;
@@ -40,13 +38,11 @@ function renderEmails(emails) {
 
   if (emails.length === 0) {
     emptyState.classList.remove('hidden');
-    footerActions.classList.add('hidden');
     setStatus('No mailto links found on this page.');
     return;
   }
 
   emptyState.classList.add('hidden');
-  footerActions.classList.remove('hidden');
 
   const countEl = document.createElement('div');
   countEl.className = 'list-count';
@@ -77,7 +73,7 @@ function renderEmails(emails) {
         setTimeout(() => {
           btn.textContent = 'Copy';
           btn.classList.remove('copied');
-        }, 2000);
+        }, TIMEOUT_MS);
       }).catch(() => showToast('Failed to copy.'));
     });
 
@@ -86,6 +82,15 @@ function renderEmails(emails) {
     row.appendChild(btn);
     emailList.appendChild(row);
   });
+}
+
+function updateBadge(emails) {
+  if (emails.length > 0) {
+    chrome.action.setBadgeText({ text: emails.length > 99 ? '99+' : String(emails.length) });
+    chrome.action.setBadgeBackgroundColor({ color: '#0066cc' });
+  } else {
+    chrome.action.setBadgeText({ text: '' });
+  }
 }
 
 function scanPage() {
@@ -109,15 +114,11 @@ function scanPage() {
           return;
         }
         const emails = results?.[0]?.result ?? [];
-        foundEmails = emails;
         renderEmails(emails);
+        updateBadge(emails);
         
         if (emails.length > 0) {
           setStatus(`Found ${emails.length} unique email${emails.length > 1 ? 's' : ''}.`);
-          chrome.action.setBadgeText({ text: emails.length > 99 ? '99+' : String(emails.length) });
-          chrome.action.setBadgeBackgroundColor({ color: '#0066cc' });
-        } else {
-          chrome.action.setBadgeText({ text: '' });
         }
       }
     );
@@ -150,21 +151,19 @@ function extractMailtoLinks() {
   return Array.from(emails);
 }
 
-copyAllBtn.addEventListener('click', () => {
-  if (foundEmails.length === 0) return;
-  const text = foundEmails.join('\n');
-  copyToClipboard(text).then(() => {
-    showToast(`Copied ${foundEmails.length} email${foundEmails.length > 1 ? 's' : ''}`);
-    copyAllBtn.textContent = 'Copied!';
-    setTimeout(() => { copyAllBtn.textContent = 'Copy All'; }, 2000);
-  }).catch(() => showToast('Failed to copy.'));
+replaceCheck.addEventListener('change', () => {
+  const value = replaceCheck.checked;
+  chrome.storage.local.set({ interceptMailto: value });
+  
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs[0]?.id) {
+      chrome.tabs.sendMessage(tabs[0].id, { action: 'updateSetting', value: value });
+    }
+  });
 });
 
-clearBtn.addEventListener('click', () => {
-  foundEmails = [];
-  renderEmails([]);
-  statusBar.classList.add('hidden');
-  chrome.action.setBadgeText({ text: '' });
+chrome.storage.local.get('interceptMailto', (data) => {
+  replaceCheck.checked = data.interceptMailto !== false;
 });
 
 scanBtn.addEventListener('click', scanPage);

@@ -11,21 +11,26 @@ function cleanMailto(href) {
   return null;
 }
 
+const TIMEOUT_MS = 2000;
+
 async function copyEmail(e, link) {
-  e.preventDefault();
-  e.stopPropagation();
-
   const email = cleanMailto(link.href);
+  if (!email) return;
 
-  if (email) {
-    try {
-      await navigator.clipboard.writeText(email);
+  if (window.interceptMailto) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  try {
+    await navigator.clipboard.writeText(email);
+    if (window.interceptMailto) {
       const originalText = link.innerText;
       link.innerText = "Copied to Clipboard!";
-      setTimeout(() => link.innerText = originalText, 2000);
-    } catch (err) {
-      console.error('Clipboard access denied', err);
+      setTimeout(() => link.innerText = originalText, TIMEOUT_MS);
     }
+  } catch (err) {
+    console.error('Clipboard access denied', err);
   }
 }
 
@@ -59,3 +64,17 @@ document.addEventListener('click', (e) => {
     copyEmail(e, link);
   }
 }, true);
+
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.interceptMailto) window.interceptMailto = changes.interceptMailto.newValue;
+});
+
+chrome.storage.local.get('interceptMailto', (data) => {
+  window.interceptMailto = data.interceptMailto === false ? false : true;
+});
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.action === 'updateSetting') {
+    window.interceptMailto = msg.value;
+  }
+});
