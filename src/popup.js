@@ -7,11 +7,11 @@ const toast = document.getElementById('toast');
 const replaceCheck = document.getElementById('replaceCheck');
 
 const TIMEOUT_MS = 2000;
+const MAILTO_REGEX = /^mailto:([^?]+)(\?.*)?$/i;
 
 function i18n() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    el.textContent = chrome.i18n.getMessage(key);
+    el.textContent = chrome.i18n.getMessage(el.getAttribute('data-i18n'));
   });
 }
 
@@ -31,21 +31,12 @@ function setStatus(msg) {
   statusBar.classList.remove('hidden');
 }
 
-function copyToClipboard(text) {
-  return navigator.clipboard.writeText(text);
-}
-
-function getInitial(email) {
-  return email.charAt(0).toUpperCase();
-}
-
 function renderEmails(emails) {
-  const rows = emailList.querySelectorAll('.email-row, .list-count');
-  rows.forEach(r => r.remove());
+  emailList.querySelectorAll('.email-row, .list-count').forEach(r => r.remove());
 
-  if (emails.length === 0) {
+  if (!emails.length) {
     emptyState.classList.remove('hidden');
-    setStatus('No mailto links found on this page.');
+    setStatus(chrome.i18n.getMessage('no_emails'));
     return;
   }
 
@@ -56,13 +47,13 @@ function renderEmails(emails) {
   countEl.textContent = `${emails.length} email${emails.length > 1 ? 's' : ''} found`;
   emailList.appendChild(countEl);
 
-  emails.forEach((email) => {
+  emails.forEach(email => {
     const row = document.createElement('div');
     row.className = 'email-row';
 
     const avatar = document.createElement('div');
     avatar.className = 'email-avatar';
-    avatar.textContent = getInitial(email);
+    avatar.textContent = email.charAt(0).toUpperCase();
 
     const addr = document.createElement('div');
     addr.className = 'email-address';
@@ -73,7 +64,7 @@ function renderEmails(emails) {
     btn.className = 'copy-btn';
     btn.textContent = 'Copy';
     btn.addEventListener('click', () => {
-      copyToClipboard(email).then(() => {
+      navigator.clipboard.writeText(email).then(() => {
         btn.textContent = 'Copied';
         btn.classList.add('copied');
         showToast(`Copied: ${email}`);
@@ -84,15 +75,13 @@ function renderEmails(emails) {
       }).catch(() => showToast('Failed to copy.'));
     });
 
-    row.appendChild(avatar);
-    row.appendChild(addr);
-    row.appendChild(btn);
+    row.append(avatar, addr, btn);
     emailList.appendChild(row);
   });
 }
 
 function updateBadge(emails) {
-  if (emails.length > 0) {
+  if (emails.length) {
     chrome.action.setBadgeText({ text: emails.length > 99 ? '99+' : String(emails.length) });
     chrome.action.setBadgeBackgroundColor({ color: '#0066cc' });
   } else {
@@ -100,31 +89,50 @@ function updateBadge(emails) {
   }
 }
 
+function extractMailtoLinks() {
+  try {
+    const anchors = document.querySelectorAll('a[href^="mailto:"]');
+    const emails = new Set();
+    anchors.forEach(a => {
+      try {
+        const match = a.getAttribute('href').match(MAILTO_REGEX);
+        if (match && match[1]) emails.add(decodeURIComponent(match[1].trim()));
+      } catch (e) {}
+    });
+    return Array.from(emails);
+  } catch (e) {
+    return [];
+  }
+}
+
 function scanPage() {
   scanBtn.classList.add('scanning');
-  scanBtn.textContent = 'Scanning…';
+  scanBtn.textContent = chrome.i18n.getMessage('scanning') || 'Scanning…';
 
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const tab = tabs[0];
-    if (!tab || !tab.id) {
+    if (!tab?.id) {
       setStatus('Unable to access current tab.');
-      resetScanBtn();
+      scanBtn.classList.remove('scanning');
+      scanBtn.textContent = chrome.i18n.getMessage('scan');
       return;
     }
 
     chrome.scripting.executeScript(
       { target: { tabId: tab.id }, func: extractMailtoLinks },
       (results) => {
-        resetScanBtn();
+        scanBtn.classList.remove('scanning');
+        scanBtn.textContent = chrome.i18n.getMessage('scan');
+
         if (chrome.runtime.lastError) {
           setStatus('Cannot scan this page (restricted URL).');
           return;
         }
+
         const emails = results?.[0]?.result ?? [];
         renderEmails(emails);
         updateBadge(emails);
-        
-        if (emails.length > 0) {
+        if (emails.length) {
           setStatus(`Found ${emails.length} unique email${emails.length > 1 ? 's' : ''}.`);
         }
       }
@@ -132,40 +140,11 @@ function scanPage() {
   });
 }
 
-function resetScanBtn() {
-  scanBtn.classList.remove('scanning');
-  scanBtn.textContent = 'Scan';
-}
-
-function extractMailtoLinks() {
-  const anchors = document.querySelectorAll('a[href^="mailto:"]');
-  const emails = new Set();
-
-  const cleanMailto = (href) => {
-    const mailtoRegex = /^mailto:([^?]+)(\?.*)?$/i;
-    const match = href.match(mailtoRegex);
-    if (match && match[1]) {
-      return decodeURIComponent(match[1].trim());
-    }
-    return null;
-  };
-
-  anchors.forEach(a => {
-    const email = cleanMailto(a.getAttribute('href'));
-    if (email) emails.add(email);
-  });
-
-  return Array.from(emails);
-}
-
 replaceCheck.addEventListener('change', () => {
   const value = replaceCheck.checked;
   chrome.storage.local.set({ interceptMailto: value });
-  
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0]?.id) {
-      chrome.tabs.sendMessage(tabs[0].id, { action: 'updateSetting', value: value });
-    }
+    tabs[0]?.id && chrome.tabs.sendMessage(tabs[0].id, { action: 'updateSetting', value });
   });
 });
 
@@ -173,6 +152,6 @@ chrome.storage.local.get('interceptMailto', (data) => {
   replaceCheck.checked = data.interceptMailto !== false;
 });
 
-scanBtn.addEventListener('click', scanPage);
 i18n();
+scanBtn.addEventListener('click', scanPage);
 scanPage();

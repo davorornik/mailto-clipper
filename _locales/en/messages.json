@@ -5,5 +5,7 @@
   "scan": { "message": "Scan" },
   "no_emails": { "message": "No emails found" },
   "intercept": { "message": "Intercept mailto" },
-  "copied": { "message": "Copied to Clipboard!" }
+  "copied": { "message": "Copied to Clipboard!" },
+  "click_to_copy": { "message": "Click to copy email address" },
+  "scanning": { "message": "Scanning…" }
 }

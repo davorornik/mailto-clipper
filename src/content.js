@@ -1,17 +1,40 @@
-window.browser = (function () {
-  return window.msBrowser || window.browser || window.chrome;
-})();
+const TIMEOUT_MS = 2000;
+const MAILTO_REGEX = /^mailto:([^?]+)(\?.*)?$/i;
+
+const observer = new MutationObserver((mutations) => {
+  for (const mutation of mutations) {
+    mutation.addedNodes.forEach(node => {
+      if (node.nodeType === 1) {
+        const mailLinks = node.matches('a[href^="mailto:"]') 
+          ? [node] 
+          : node.querySelectorAll('a[href^="mailto:"]');
+
+        mailLinks.forEach(link => {
+          link.style.cursor = 'copy';
+          link.title = chrome.i18n.getMessage('click_to_copy');
+        });
+      }
+    });
+  }
+});
 
 function cleanMailto(href) {
-  const mailtoRegex = /^mailto:([^?]+)(\?.*)?$/i;
-  const match = href.match(mailtoRegex);
+  const match = href.match(MAILTO_REGEX);
   if (match && match[1]) {
     return decodeURIComponent(match[1].trim());
   }
   return null;
 }
 
-const TIMEOUT_MS = 2000;
+function getEmails() {
+  const anchors = document.querySelectorAll('a[href^="mailto:"]');
+  const emails = new Set();
+  anchors.forEach(a => {
+    const email = cleanMailto(a.getAttribute('href'));
+    if (email) emails.add(email);
+  });
+  return Array.from(emails);
+}
 
 async function copyEmail(e, link) {
   const email = cleanMailto(link.href);
@@ -30,39 +53,21 @@ async function copyEmail(e, link) {
       setTimeout(() => link.innerText = originalText, TIMEOUT_MS);
     }
   } catch (err) {
-    console.error('Clipboard access denied', err);
+    console.error('Clipboard access denied:', err.message);
   }
 }
 
-const observer = new MutationObserver((mutations) => {
-  for (const mutation of mutations) {
-    mutation.addedNodes.forEach(node => {
-      if (node.nodeType === 1) {
-        const mailLinks = node.matches('a[href^="mailto:"]') 
-          ? [node] 
-          : node.querySelectorAll('a[href^="mailto:"]');
-
-        mailLinks.forEach(link => {
-          link.style.cursor = 'copy';
-          link.title = "Click to copy email address";
-        });
-      }
-    });
-  }
-});
-
 if (document.body) {
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
+  observer.observe(document.body, { childList: true, subtree: true });
+  getEmails().forEach(link => {
+    link.style.cursor = 'copy';
+    link.title = chrome.i18n.getMessage('click_to_copy');
   });
 }
 
 document.addEventListener('click', (e) => {
   const link = e.target.closest('a[href^="mailto:"]');
-  if (link) {
-    copyEmail(e, link);
-  }
+  if (link) copyEmail(e, link);
 }, true);
 
 chrome.storage.onChanged.addListener((changes) => {
@@ -70,11 +75,14 @@ chrome.storage.onChanged.addListener((changes) => {
 });
 
 chrome.storage.local.get('interceptMailto', (data) => {
-  window.interceptMailto = data.interceptMailto === false ? false : true;
+  window.interceptMailto = data.interceptMailto !== false;
 });
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg.action === 'updateSetting') {
-    window.interceptMailto = msg.value;
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.action === 'updateSetting') window.interceptMailto = msg.value;
+  if (msg.action === 'getEmails') {
+    const emails = getEmails();
+    chrome.storage.local.set({ [`cache_${location.href}`]: emails });
+    return emails;
   }
 });

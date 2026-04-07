@@ -1,16 +1,23 @@
+const MAILTO_REGEX = /^mailto:([^?]+)(\?.*)?$/i;
+
 function extractMailtoLinks() {
-  const anchors = document.querySelectorAll('a[href^="mailto:"]');
-  const emails = new Set();
-  const mailtoRegex = /^mailto:([^?]+)(\?.*)?$/i;
-  
-  anchors.forEach(a => {
-    const match = a.getAttribute('href').match(mailtoRegex);
-    if (match && match[1]) {
-      emails.add(decodeURIComponent(match[1].trim()));
-    }
-  });
-  
-  return Array.from(emails);
+  try {
+    const anchors = document.querySelectorAll('a[href^="mailto:"]');
+    if (!anchors.length) return [];
+    
+    const emails = new Set();
+    anchors.forEach(a => {
+      try {
+        const match = a.getAttribute('href').match(MAILTO_REGEX);
+        if (match && match[1]) {
+          emails.add(decodeURIComponent(match[1].trim()));
+        }
+      } catch (e) {}
+    });
+    return Array.from(emails);
+  } catch (e) {
+    return [];
+  }
 }
 
 function updateBadge(tabId) {
@@ -23,11 +30,15 @@ function updateBadge(tabId) {
     chrome.scripting.executeScript(
       { target: { tabId: tabId }, func: extractMailtoLinks },
       (results) => {
-        const emails = results?.[0]?.result ?? [];
-        if (emails.length > 0) {
-          chrome.action.setBadgeText({ text: emails.length > 99 ? '99+' : String(emails.length) });
-          chrome.action.setBadgeBackgroundColor({ color: '#0066cc' });
-        } else {
+        try {
+          const emails = results?.[0]?.result ?? [];
+          if (emails.length > 0) {
+            chrome.action.setBadgeText({ text: emails.length > 99 ? '99+' : String(emails.length) });
+            chrome.action.setBadgeBackgroundColor({ color: '#0066cc' });
+          } else {
+            chrome.action.setBadgeText({ text: '' });
+          }
+        } catch (e) {
           chrome.action.setBadgeText({ text: '' });
         }
       }
@@ -47,16 +58,12 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 
 chrome.runtime.onStartup.addListener(() => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0]?.id) {
-      updateBadge(tabs[0].id);
-    }
+    if (tabs[0]?.id) updateBadge(tabs[0].id);
   });
 });
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0]?.id) {
-      updateBadge(tabs[0].id);
-    }
+    if (tabs[0]?.id) updateBadge(tabs[0].id);
   });
 });
