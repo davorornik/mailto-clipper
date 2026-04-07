@@ -21,8 +21,14 @@ function extractMailtoLinks() {
 }
 
 function updateBadge(tabId) {
-  chrome.tabs.get(tabId, (tab) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const tab = tabs[0];
     if (!tab?.url || tab.url.startsWith('chrome://') || tab.url.startsWith('about:')) {
+      chrome.action.setBadgeText({ text: '' });
+      return;
+    }
+    
+    if (tab.id !== tabId) {
       chrome.action.setBadgeText({ text: '' });
       return;
     }
