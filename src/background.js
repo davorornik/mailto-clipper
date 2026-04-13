@@ -20,16 +20,18 @@ function extractMailtoLinks() {
   }
 }
 
+const badgeApi = chrome.action || chrome.browserAction;
+
 function updateBadge(tabId) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const tab = tabs[0];
     if (!tab?.url || tab.url.startsWith('chrome://') || tab.url.startsWith('about:')) {
-      chrome.action.setBadgeText({ text: '' });
+      if (badgeApi) badgeApi.setBadgeText({ text: '' });
       return;
     }
     
     if (tab.id !== tabId) {
-      chrome.action.setBadgeText({ text: '' });
+      if (badgeApi) badgeApi.setBadgeText({ text: '' });
       return;
     }
     
@@ -39,13 +41,15 @@ function updateBadge(tabId) {
         try {
           const emails = results?.[0]?.result ?? [];
           if (emails.length > 0) {
-            chrome.action.setBadgeText({ text: emails.length > 99 ? '99+' : String(emails.length) });
-            chrome.action.setBadgeBackgroundColor({ color: '#0066cc' });
+            if (badgeApi) {
+              badgeApi.setBadgeText({ text: emails.length > 99 ? '99+' : String(emails.length) });
+              badgeApi.setBadgeBackgroundColor({ color: '#0066cc' });
+            }
           } else {
-            chrome.action.setBadgeText({ text: '' });
+            if (badgeApi) badgeApi.setBadgeText({ text: '' });
           }
         } catch (e) {
-          chrome.action.setBadgeText({ text: '' });
+          if (badgeApi) badgeApi.setBadgeText({ text: '' });
         }
       }
     );

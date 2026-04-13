@@ -1,6 +1,11 @@
 # Mailto Clipper
 
-A Chrome extension that copies email addresses to your clipboard instead of opening your default mail app.
+A browser extension that copies email addresses to your clipboard instead of opening your default mail app.
+
+## Download
+
+- [Firefox](https://addons.mozilla.org/en-US/firefox/addon/mailto-clipper/)
+- [Chrome](https://chromewebstore.google.com/detail/mailto-clipper/hlnmglnhjpmdlfehfhlhfabeofdcckaa?hl=en&authuser=0)
 
 ## Features
 
@@ -12,10 +17,18 @@ A Chrome extension that copies email addresses to your clipboard instead of open
 
 ## Installation
 
+### From browser stores
+
+Download from [Firefox](https://addons.mozilla.org/en-US/firefox/addon/mailto-clipper/) or [Chrome](https://chromewebstore.google.com/detail/mailto-clipper/hlnmglnhjpmdlfehfhlhfabeofdcckaa?hl=en&authuser=0) add-on stores.
+
+### From source
+
 1. Download the latest release or zip the following files:
+
    - `manifest.json`
    - `src/` folder
    - `_locales/` folder
+
 2. Navigate to `chrome://extensions`
 3. Enable **Developer mode** (toggle in top right)
 4. Click **Load unpacked**
