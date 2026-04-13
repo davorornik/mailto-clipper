@@ -23,16 +23,13 @@ Download from [Firefox](https://addons.mozilla.org/en-US/firefox/addon/mailto-cl
 
 ### From source
 
-1. Download the latest release or zip the following files:
-
-   - `manifest.json`
-   - `src/` folder
-   - `_locales/` folder
-
-2. Navigate to `chrome://extensions`
-3. Enable **Developer mode** (toggle in top right)
-4. Click **Load unpacked**
-5. Select the zipped extension folder
+| Step | Firefox | Chrome |
+| --- | --- | --- |
+| 1 | Download latest release or zip manifest.json, src/, _locales/ | Same |
+| 2 | Navigate to about:addons | Navigate to chrome://extensions |
+| 3 | Click the gear icon | Enable Developer mode |
+| 4 | Click Debug Add-ons | Click Load unpacked |
+| 5 | Click Load Temporary Add-on and select the folder | Select the zipped extension folder |
 
 ## Usage
 
